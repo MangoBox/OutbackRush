@@ -19,19 +19,18 @@ public class PlayerController : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void LateUpdate () {
+	void FixedUpdate () {
         yaw += sensitivity * Input.GetAxis("Mouse X");
         pitch = Mathf.Clamp(pitch + (sensitivity * -Input.GetAxis("Mouse Y")), -90f, 90f);
 
         camera.transform.rotation = Quaternion.Euler(new Vector3(pitch, yaw, 0f));
         transform.rotation = Quaternion.Euler(new Vector3(0f, yaw, 0f));
 
-        
-
+		rigidbody.AddRelativeForce(new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")) * movementSpeed);
 	}
 
-    void FixedUpdate()
+    /*void FixedUpdate()
     {
-        rigidbody.AddRelativeForce(new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")) * movementSpeed);
-    }
+        
+    }*/
 }
