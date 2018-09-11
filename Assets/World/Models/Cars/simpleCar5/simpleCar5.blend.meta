@@ -1,69 +1,38 @@
 fileFormatVersion: 2
-guid: 0cf152190b1393e439809345cc362bf7
+guid: 3d6b8f4b4c697d94e88292b9d6950299
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
     100000: Cube
     100002: Cylinder
-    100004: Cylinder_001
-    100006: Cylinder_002
-    100008: Cylinder_003
-    100010: //RootNode
-    100012: Wheels
-    100014: Antenna
-    100016: FuelCap
-    100018: MainBody
+    100004: Cylinder_003
+    100006: //RootNode
+    100008: Wheels
     400000: Cube
     400002: Cylinder
-    400004: Cylinder_001
-    400006: Cylinder_002
-    400008: Cylinder_003
-    400010: //RootNode
-    400012: Wheels
-    400014: Antenna
-    400016: FuelCap
-    400018: MainBody
+    400004: Cylinder_003
+    400006: //RootNode
+    400008: Wheels
     2100000: MainBody
     2100002: MainBodyAccent
     2100004: WindowMaterial
     2100006: BrakeMaterial
-    2100008: HeadlightMaterial
     2300000: Cube
     2300002: Cylinder
-    2300004: Cylinder_001
-    2300006: Cylinder_002
-    2300008: Cylinder_003
-    2300010: Wheels
-    2300012: Antenna
-    2300014: FuelCap
-    2300016: MainBody
+    2300004: Cylinder_003
+    2300006: Wheels
     3300000: Cube
     3300002: Cylinder
-    3300004: Cylinder_001
-    3300006: Cylinder_002
-    3300008: Cylinder_003
-    3300010: Wheels
-    3300012: Antenna
-    3300014: FuelCap
-    3300016: MainBody
+    3300004: Cylinder_003
+    3300006: Wheels
     4300000: Cylinder_003
-    4300002: Cylinder_002
-    4300004: Cylinder_001
-    4300006: Cylinder
-    4300008: Cube
-    4300010: Wheels
-    4300012: FuelCap
-    4300014: Antenna
-    4300016: MainBody
+    4300002: Cylinder
+    4300004: Cube
+    4300006: Wheels
     7400000: Default Take
     9500000: //RootNode
     2186277476908879412: ImportLogs
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: HeadlightMaterial
-    second: {fileID: 2100000, guid: 6abd87cbe2c452d4393fffce8f1b8875, type: 2}
+  externalObjects: {}
   materials:
     importMaterials: 0
     materialName: 0

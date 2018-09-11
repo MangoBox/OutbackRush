@@ -29,6 +29,26 @@ public class PlayerController : MonoBehaviour {
 		rigidbody.AddRelativeForce(new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")) * movementSpeed);
 	}
 
+
+    void Update()
+    {
+        if (Input.GetKey(KeyCode.Mouse0))
+        {
+            RaycastHit rh;
+            if (Physics.Raycast(camera.transform.position, camera.transform.forward, out rh, 3))
+            {
+                if (rh.collider.name == "MainBody")
+                {
+                    Material dirtMat = rh.collider.gameObject.GetComponent<MeshRenderer>().materials[1];
+                    float currentDirt = Mathf.Clamp01(dirtMat.GetFloat("_BlendAmount") - 0.025f);
+                    dirtMat.SetFloat("_BlendAmount", currentDirt);
+                }
+                
+            }
+
+        }
+    }
+
     /*void FixedUpdate()
     {
         

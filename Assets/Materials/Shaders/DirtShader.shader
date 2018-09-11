@@ -17,7 +17,7 @@
  
         sampler2D _MainTex;
         sampler2D _PaintTex;
-        fixed _BlendAmount;
+        
 
 		struct Input {
 			float2 uv_PaintTex;
@@ -34,6 +34,7 @@
 		// #pragma instancing_options assumeuniformscaling
 		UNITY_INSTANCING_BUFFER_START(Props)
 			// put more per-instance properties here
+			fixed _BlendAmount;
 		UNITY_INSTANCING_BUFFER_END(Props)
 
 		void surf(Input IN, inout SurfaceOutputStandardSpecular o) {
@@ -44,7 +45,7 @@
 
 			o.Specular = main.rgb * (1 - paint.a * _BlendAmount) + paint.a * _BlendAmount * _DirtColor;
 			
-			o.Smoothness = _Metallic * (1 - paint.a);
+			o.Smoothness = _Metallic * (1 - paint.a * _BlendAmount);
 		}
 		ENDCG
 	}

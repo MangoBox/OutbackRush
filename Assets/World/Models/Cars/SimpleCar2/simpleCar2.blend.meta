@@ -11,6 +11,10 @@ ModelImporter:
     100010: Cylinder_001
     100012: Cylinder_002
     100014: Cylinder_003
+    100016: Antenna
+    100018: FuelCap
+    100020: MainBody
+    100022: SpareTire
     400000: //RootNode
     400002: Cube
     400004: Wheels
@@ -19,6 +23,10 @@ ModelImporter:
     400010: Cylinder_001
     400012: Cylinder_002
     400014: Cylinder_003
+    400016: Antenna
+    400018: FuelCap
+    400020: MainBody
+    400022: SpareTire
     2100000: Material
     2100002: BrakeMaterial
     2100004: WindowMaterial
@@ -35,6 +43,10 @@ ModelImporter:
     2300010: Cylinder_001
     2300012: Cylinder_002
     2300014: Cylinder_003
+    2300016: Antenna
+    2300018: FuelCap
+    2300020: MainBody
+    2300022: SpareTire
     3300000: //RootNode
     3300002: Cube
     3300004: Wheels
@@ -43,6 +55,10 @@ ModelImporter:
     3300010: Cylinder_001
     3300012: Cylinder_002
     3300014: Cylinder_003
+    3300016: Antenna
+    3300018: FuelCap
+    3300020: MainBody
+    3300022: SpareTire
     4300000: Cube
     4300002: Wheels
     4300004: Wheels_001
@@ -50,6 +66,10 @@ ModelImporter:
     4300008: Cylinder
     4300010: Cylinder_002
     4300012: Cylinder_003
+    4300014: FuelCap
+    4300016: Antenna
+    4300018: SpareTire
+    4300020: MainBody
     7400000: Default Take
     9500000: //RootNode
     2186277476908879412: ImportLogs
