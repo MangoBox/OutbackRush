@@ -65,4 +65,19 @@ public class BayController : MonoBehaviour {
 		//Notify gameController.
 	}
 
+    //Gets if all bays are either waiting or full
+    public bool isFull()
+    {
+        foreach (Bay b in bays) {
+            if(b.carStatus == Bay.CarStatus.EMPTY) return false;
+        }
+        return true;
+    }
+
+    //Gets if bay is in use
+    public bool isInUse(int bay)
+    {
+        return bays[bay].carStatus != Bay.CarStatus.EMPTY;
+    }
+
 }

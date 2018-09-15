@@ -41,6 +41,11 @@ public class PlayerController : MonoBehaviour {
                 {
                     Material dirtMat = rh.collider.gameObject.GetComponent<MeshRenderer>().materials[1];
                     float currentDirt = Mathf.Clamp01(dirtMat.GetFloat("_BlendAmount") - 0.025f);
+                    if (currentDirt <= 0)
+                    {
+                        //Car is completely clean
+                        GameController.gc.NotifyCarReady(rh.collider.GetComponentInParent<CarInstance>());
+                    }
                     dirtMat.SetFloat("_BlendAmount", currentDirt);
                 }
                 

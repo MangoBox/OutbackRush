@@ -8,7 +8,9 @@ public class GameController : MonoBehaviour {
 	public static GameController gc;
 
     public GameObject[] carPrefabs;
+    public BayController bayController;
 
+    public List<CarInstance> allWorldCars = new List<CarInstance>();
 
     public GameObject carObj;
 
@@ -17,18 +19,32 @@ public class GameController : MonoBehaviour {
 		gc = this;
 	}
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	}
+    //Checks if a car be spawned, and if so, spawns it and sets bay information.
+    void CheckCar()
+    {
+        if (bayController.isFull()) return;
 
-    void SpawnCar()
+        int bayNum;
+        do
+        {
+            bayNum = Random.Range(0, 6);
+        } while (!bayController.isInUse(bayNum));
+
+        bayController.bays[bayNum].carStatus = Bay.CarStatus.WAITING;
+
+    }
+
+    void SpawnCar(int bay)
     {
         GameObject pref = carPrefabs[Random.Range(0, carPrefabs.Length)];
         GameObject car = Instantiate(pref);
+        CarInstance carInst = car.GetComponent<CarInstance>();
+        carInst.bayNum = bay;
+        allWorldCars.Add(carInst);
+    }
+
+    public void NotifyCarReady(CarInstance carInst)
+    {
+        carInst.CarLeave();
     }
 }

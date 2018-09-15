@@ -4,6 +4,13 @@ using UnityEngine;
 
 public class Bay : MonoBehaviour {
 
+    public enum CarStatus
+    {
+        EMPTY,
+        WAITING,
+        FULL
+    }
+    public CarStatus carStatus;
 	public float currentProgress;
 
     //Callback delegate for GameController. Bay parameter is self pass in GameController.
