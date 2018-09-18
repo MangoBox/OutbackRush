@@ -157,12 +157,4 @@ AnimationClip:
   m_HasGenericRootTransform: 1
   m_HasMotionFloatCurves: 0
   m_GenerateMotionCurves: 0
-  m_Events:
-  - time: 5
-    functionName: 
-    data: 
-    objectReferenceParameter: {fileID: 10900000, guid: 447591ee3d9d4204899be5fe25968ea0,
-      type: 3}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 0
+  m_Events: []

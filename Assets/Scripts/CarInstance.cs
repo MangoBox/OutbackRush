@@ -7,21 +7,23 @@ public class CarInstance : MonoBehaviour {
     float dirtAmount;
     float fuelAmount;
 
-    public int bayNum {
-     set {
-         bayNum = value;
-         setAnimationBay(value);
-     }
-    }
+    public MeshRenderer bodyRenderer;
 
+    public int bayNum;
 
-    void setAnimationBay(int bay) {
+    public void SetAnimationBay(int bay) {
+        bayNum = bay;
         GetComponent<Animator>().SetInteger("BayNum", bay);
     }
 
     public void CarLeave()
     {
         GetComponent<Animator>().SetTrigger("LeaveBay");
+    }
+
+    public void Start()
+    {
+        bodyRenderer.materials[1].color = new Color(Random.value, Random.value, Random.value);
     }
 
 }
