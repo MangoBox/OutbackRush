@@ -18,12 +18,26 @@ public class CarInstance : MonoBehaviour {
 
     public void CarLeave()
     {
-        GetComponent<Animator>().SetTrigger("LeaveBay");
+        Animator anim = GetComponent<Animator>();
+        if (anim != null)
+        {
+            anim.SetTrigger("LeaveBay");
+        }
     }
 
     public void Start()
     {
         bodyRenderer.materials[1].color = new Color(Random.value, Random.value, Random.value);
+    }
+
+    public void CarArrivalEvent()
+    {
+        GameController.gc.NotifyCarStationEnter(this);
+    }
+
+    public void CarDestroy()
+    {
+        Destroy(gameObject);
     }
 
 }

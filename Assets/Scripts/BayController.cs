@@ -33,9 +33,11 @@ public class BayController : MonoBehaviour {
 	}
 
 	void InitBays() {
+        int bayNum = 0;
 		foreach (Bay b in bays) {
 			b.currentProgress = 1f;
             b.bayFinishEvent += BayFinish;
+            b.bayNum = bayNum++;
 		}
         
 	}
@@ -60,8 +62,8 @@ public class BayController : MonoBehaviour {
 
 	//A callback for bay classes, notified by Bay class.
 	void BayFinish(Bay bay) {
-		bay.currentProgress = 1;
-
+        GameController.gc.GetCarByBay(bay.bayNum).CarLeave();
+        bay.currentProgress = 0f;
 		//Notify gameController.
 	}
 

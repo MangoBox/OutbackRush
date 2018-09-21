@@ -19,10 +19,7 @@ public class GameController : MonoBehaviour {
 	}
     
     void Start() {
-        for(int i = 0; i < 6; i++)
-        {
-            CheckCar();
-        }
+        InvokeRepeating("CheckCar", 0.3f, 2f);
     }
 
     //Checks if a car be spawned, and if so, spawns it and sets bay information.
@@ -37,7 +34,6 @@ public class GameController : MonoBehaviour {
 
         bayController.bays[bayNum].carStatus = Bay.CarStatus.WAITING;
         SpawnCar(bayNum);
-
     }
 
     void SpawnCar(int bay) {
@@ -50,5 +46,17 @@ public class GameController : MonoBehaviour {
 
     public void NotifyCarReady(CarInstance carInst) {
         carInst.CarLeave();
+        bayController.bays[carInst.bayNum].carStatus = Bay.CarStatus.EMPTY;
+    }
+
+    public void NotifyCarStationEnter(CarInstance carInst)
+    {
+        bayController.bays[carInst.bayNum].carStatus = Bay.CarStatus.FULL;
+        bayController.bays[carInst.bayNum].currentProgress = 1f;
+    }
+
+    public CarInstance GetCarByBay(int bay)
+    {
+        return allWorldCars.Find(c => c.bayNum == bay);
     }
 }

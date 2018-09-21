@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Bay : MonoBehaviour {
 
+
+    public int bayNum;
     public enum CarStatus
     {
         EMPTY,
@@ -25,6 +27,7 @@ public class Bay : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (currentProgress > 0f) {
+            if (carStatus != CarStatus.FULL) return;
 			currentProgress -= BayController.bc.bayProgressRate * Time.deltaTime;
 		} else {
             //Call callback delegate.
