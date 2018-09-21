@@ -42,7 +42,6 @@
 			fixed4 paint = tex2D(_PaintTex, IN.uv_PaintTex);
 			//o.Albedo = lerp(main.rgb, paint, main.a * _BlendAmount);
 
-
 			o.Specular = main.rgb * (1 - paint.a * _BlendAmount) + paint.a * _BlendAmount * _DirtColor;
 			
 			o.Smoothness = _Metallic * (1 - paint.a * _BlendAmount);

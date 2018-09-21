@@ -14,23 +14,19 @@ public class GameController : MonoBehaviour {
 
     public GameObject carObj;
 
-
 	void Awake() {
 		gc = this;
 	}
     
-    void Start()
-    {
+    void Start() {
         for(int i = 0; i < 6; i++)
         {
             CheckCar();
         }
     }
 
-
     //Checks if a car be spawned, and if so, spawns it and sets bay information.
-    void CheckCar()
-    {
+    void CheckCar() {
         if (bayController.isFull()) return;
 
         int bayNum;
@@ -44,8 +40,7 @@ public class GameController : MonoBehaviour {
 
     }
 
-    void SpawnCar(int bay)
-    {
+    void SpawnCar(int bay) {
         GameObject pref = carPrefabs[Random.Range(0, carPrefabs.Length)];
         GameObject car = Instantiate(pref);
         CarInstance carInst = car.GetComponent<CarInstance>();
@@ -53,8 +48,7 @@ public class GameController : MonoBehaviour {
         allWorldCars.Add(carInst);
     }
 
-    public void NotifyCarReady(CarInstance carInst)
-    {
+    public void NotifyCarReady(CarInstance carInst) {
         carInst.CarLeave();
     }
 }

@@ -26,12 +26,10 @@ public class PlayerController : MonoBehaviour {
         camera.transform.rotation = Quaternion.Euler(new Vector3(pitch, yaw, 0f));
         transform.rotation = Quaternion.Euler(new Vector3(0f, yaw, 0f));
 
-		rigidbody.AddRelativeForce(new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")) * movementSpeed);
+        rigidbody.AddRelativeForce(new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")) * movementSpeed); 
 	}
 
-
-    void Update()
-    {
+    void Update() {
         if (Input.GetKey(KeyCode.Mouse0))
         {
             RaycastHit rh;
@@ -53,9 +51,4 @@ public class PlayerController : MonoBehaviour {
 
         }
     }
-
-    /*void FixedUpdate()
-    {
-        
-    }*/
 }
