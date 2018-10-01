@@ -25,6 +25,11 @@ public class CarInstance : MonoBehaviour {
         }
     }
 
+    public void FinishBayEnter()
+    {
+        BayController.bc.NotifyBayEnter(this);
+    }
+
     public void Start()
     {
         bodyRenderer.materials[1].color = new Color(Random.value, Random.value, Random.value);

@@ -47,11 +47,12 @@ public class GameController : MonoBehaviour {
     public void NotifyCarReady(CarInstance carInst) {
         carInst.CarLeave();
         bayController.bays[carInst.bayNum].carStatus = Bay.CarStatus.EMPTY;
+        bayController.bays[carInst.bayNum].currentProgress = 0;
     }
 
     public void NotifyCarStationEnter(CarInstance carInst)
     {
-        bayController.bays[carInst.bayNum].carStatus = Bay.CarStatus.FULL;
+        //bayController.bays[carInst.bayNum].carStatus = Bay.CarStatus.FULL;
         bayController.bays[carInst.bayNum].currentProgress = 1f;
     }
 

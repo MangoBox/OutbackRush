@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+    
 public class PlayerController : MonoBehaviour {
 
     public Camera camera;
@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour {
     public float yaw = 0.0f;
     public float pitch = 0.0f;
 
+    public float cleaningSpeed = 0.025f;
 	// Use this for initialization
 	void Start () {
         Cursor.lockState = CursorLockMode.Locked;
@@ -42,7 +43,7 @@ public class PlayerController : MonoBehaviour {
                 if (rh.collider.name == "MainBody")
                 {
                     Material dirtMat = rh.collider.gameObject.GetComponent<MeshRenderer>().materials[1];
-                    float currentDirt = Mathf.Clamp01(dirtMat.GetFloat("_BlendAmount") - 0.025f);
+                    float currentDirt = Mathf.Clamp01(dirtMat.GetFloat("_BlendAmount") - cleaningSpeed * Time.deltaTime);
                     if (currentDirt <= 0)
                     {
                         //Car is completely clean
