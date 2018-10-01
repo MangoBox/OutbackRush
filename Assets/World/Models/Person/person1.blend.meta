@@ -1,35 +1,58 @@
 fileFormatVersion: 2
-guid: c5e3f94783e241e4d9842e85717022e7
+guid: 27a1b4826baf3e84994854ec1ec20f91
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
-    100000: //RootNode
-    400000: //RootNode
-    2100000: PetrolBody1
-    2100002: DetailPanel
-    2100004: PetrolBody2
-    2300000: //RootNode
-    3300000: //RootNode
-    4300000: Cube
-    6400000: //RootNode
+    100000: Arm_L
+    100002: Arm_R
+    100004: Armature
+    100006: Elbow_L
+    100008: Elbow_R
+    100010: Foot_L
+    100012: Foot_R
+    100014: Head
+    100016: Leg_L
+    100018: Leg_R
+    100020: LowerChest
+    100022: LowerLeft_R
+    100024: LowerLeg_L
+    100026: MainBody
+    100028: Neck
+    100030: Pelvis
+    100032: //RootNode
+    100034: Shoulder_L
+    100036: Shoulder_R
+    100038: UpperChest
+    400000: Arm_L
+    400002: Arm_R
+    400004: Armature
+    400006: Elbow_L
+    400008: Elbow_R
+    400010: Foot_L
+    400012: Foot_R
+    400014: Head
+    400016: Leg_L
+    400018: Leg_R
+    400020: LowerChest
+    400022: LowerLeft_R
+    400024: LowerLeg_L
+    400026: MainBody
+    400028: Neck
+    400030: Pelvis
+    400032: //RootNode
+    400034: Shoulder_L
+    400036: Shoulder_R
+    400038: UpperChest
+    2100000: Shirt
+    2100002: Trousers
+    2100004: Material
+    2100006: Cap
+    2100008: Boots
+    4300000: MainBody
     7400000: Default Take
     9500000: //RootNode
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: DetailPanel
-    second: {fileID: 2100000, guid: ae5421fe06baf774ca2a2c520a3710a0, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: PetrolBody1
-    second: {fileID: 2100000, guid: 46359adade1a77b45bb4670e9b632293, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: PetrolBody2
-    second: {fileID: 2100000, guid: 4620317ccbbe5bc4e99b51051ccf543a, type: 2}
+    13700000: MainBody
+  externalObjects: {}
   materials:
     importMaterials: 1
     materialName: 0
@@ -62,7 +85,7 @@ ModelImporter:
     lODScreenPercentages: []
     globalScale: 1
     meshCompression: 0
-    addColliders: 1
+    addColliders: 0
     importVisibility: 1
     importBlendShapes: 1
     importCameras: 1

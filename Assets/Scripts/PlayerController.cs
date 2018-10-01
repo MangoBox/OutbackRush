@@ -20,20 +20,24 @@ public class PlayerController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void FixedUpdate () {
+        rigidbody.AddRelativeForce(new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")) * movementSpeed); 
+	}
+
+    void LateUpdate()
+    {
         yaw += sensitivity * Input.GetAxis("Mouse X");
         pitch = Mathf.Clamp(pitch + (sensitivity * -Input.GetAxis("Mouse Y")), -90f, 90f);
 
-        camera.transform.rotation = Quaternion.Euler(new Vector3(pitch, yaw, 0f));
+        /*camera.transform.rotation = Quaternion.Euler(new Vector3(pitch, yaw, 0f));*/
         transform.rotation = Quaternion.Euler(new Vector3(0f, yaw, 0f));
+    }
 
-        rigidbody.AddRelativeForce(new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")) * movementSpeed); 
-	}
 
     void Update() {
         if (Input.GetKey(KeyCode.Mouse0))
         {
             RaycastHit rh;
-            if (Physics.Raycast(camera.transform.position, camera.transform.forward, out rh, 3))
+            if (Physics.Raycast(transform.position, transform.forward, out rh, 3))
             {
                 if (rh.collider.name == "MainBody")
                 {
