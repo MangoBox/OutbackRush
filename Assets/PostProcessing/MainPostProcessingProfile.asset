@@ -29,7 +29,7 @@ MonoBehaviour:
     m_Settings:
       excludeSkybox: 0
   antialiasing:
-    m_Enabled: 0
+    m_Enabled: 1
     m_Settings:
       method: 0
       fxaaSettings:
@@ -42,8 +42,8 @@ MonoBehaviour:
   ambientOcclusion:
     m_Enabled: 1
     m_Settings:
-      intensity: 1.17
-      radius: 0.76
+      intensity: 0.38
+      radius: 0.37
       sampleCount: 10
       downsampling: 1
       forceForwardCompatibility: 0
@@ -71,10 +71,10 @@ MonoBehaviour:
   depthOfField:
     m_Enabled: 0
     m_Settings:
-      focusDistance: 2.92
-      aperture: 32
-      focalLength: 151
-      useCameraFov: 0
+      focusDistance: 2.9
+      aperture: 0.5
+      focalLength: 165
+      useCameraFov: 1
       kernelSize: 1
   motionBlur:
     m_Enabled: 0
@@ -100,7 +100,7 @@ MonoBehaviour:
     m_Enabled: 1
     m_Settings:
       bloom:
-        intensity: 0.03
+        intensity: 0.19
         threshold: 1.5
         softKnee: 1
         radius: 7

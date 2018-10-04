@@ -6,6 +6,7 @@ public class PlayerController : MonoBehaviour {
 
     public Camera camera;
     public Rigidbody rigidbody;
+    public Animator playerAnimator;
 
     public float sensitivity;
     public float movementSpeed;
@@ -14,34 +15,40 @@ public class PlayerController : MonoBehaviour {
     public float pitch = 0.0f;
 
     public float cleaningSpeed = 0.025f;
-	// Use this for initialization
-	void Start () {
-        Cursor.lockState = CursorLockMode.Locked;
-	}
 	
 	// Update is called once per frame
 	void FixedUpdate () {
-        rigidbody.AddRelativeForce(new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")) * movementSpeed); 
+        rigidbody.AddForce(new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")) * movementSpeed); 
 	}
 
     void LateUpdate()
     {
-        yaw += sensitivity * Input.GetAxis("Mouse X");
-        pitch = Mathf.Clamp(pitch + (sensitivity * -Input.GetAxis("Mouse Y")), -90f, 90f);
+        Vector2 lookDirection = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")).normalized;
 
-        /*camera.transform.rotation = Quaternion.Euler(new Vector3(pitch, yaw, 0f));*/
-        transform.rotation = Quaternion.Euler(new Vector3(0f, yaw, 0f));
+        if (lookDirection.sqrMagnitude != 0)
+        {
+            transform.rotation = Quaternion.Euler(0, 360 - (Mathf.Rad2Deg * Mathf.Atan2(lookDirection.y, lookDirection.x) - 90), 0);
+        }
+
+        float animParam = (lookDirection.magnitude + 1f) / 2f;
+        playerAnimator.SetFloat("Vertical", animParam);
+
     }
 
 
     void Update() {
+
+
         if (Input.GetKey(KeyCode.Mouse0))
         {
             RaycastHit rh;
-            if (Physics.Raycast(transform.position, transform.forward, out rh, 3))
+            if (Physics.Raycast(camera.transform.position, camera.transform.forward, out rh))
             {
+                print(rh.collider.name);
                 if (rh.collider.name == "MainBody")
                 {
+                    /*if (Vector3.Distance(rh.collider.ClosestPoint(transform.position), transform.position) > 5)
+                        return;*/
                     Material dirtMat = rh.collider.gameObject.GetComponent<MeshRenderer>().materials[1];
                     float currentDirt = Mathf.Clamp01(dirtMat.GetFloat("_BlendAmount") - cleaningSpeed * Time.deltaTime);
                     if (currentDirt <= 0)

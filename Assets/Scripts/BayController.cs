@@ -15,10 +15,6 @@ public class BayController : MonoBehaviour {
 	//Reference to all station bays. Remember to listen to callbacks.
 	public Bay[] bays;
 
-
-	//TODO: Consider moving below bay UI fields to seperate class in order to organise code.
-	public Image[] bayImages;
-
 	public Color startColor;
 	public Color finishColor;
 
@@ -41,31 +37,12 @@ public class BayController : MonoBehaviour {
 		}
         
 	}
-	
-	// Update is called once per frame
-	void Update () {
-        int i = 0;
-		foreach(Bay b in bays)
-        {
-            UpdateBaySprite(bayImages[i++], b.currentProgress, true);
-        }
-	}
-
-	void UpdateBaySprite(Image baySprite, float prog, bool enabled) {
-		if (enabled) {
-			baySprite.fillAmount = prog;
-			baySprite.color = Color.Lerp (finishColor, startColor, prog);
-		} else {
-			baySprite.color = new Color (0, 0, 0, 0);
-		}
-	}
 
 	//A callback for bay classes, notified by Bay class.
 	void BayFinish(Bay bay) {
         CarInstance carInst = GameController.gc.GetCarByBay(bay.bayNum);
         if (carInst == null) return;
         carInst.CarLeave();
-        bay.currentProgress = 0f;
 		//Notify gameController.
 	}
 
@@ -87,6 +64,12 @@ public class BayController : MonoBehaviour {
     public void NotifyBayEnter(CarInstance carInstance)
     {
         bays[carInstance.bayNum].carStatus = Bay.CarStatus.FULL;
+        carInstance.OpenBayIndicator();
     }
 
+
+    public void EmptyBay(int bay)
+    {
+        bays[bay].carStatus = Bay.CarStatus.EMPTY;
+    }
 }
