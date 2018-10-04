@@ -13,7 +13,7 @@ public class BayController : MonoBehaviour {
 	public float bayProgressRate = 0.1f;
 
 	//Reference to all station bays. Remember to listen to callbacks.
-	public Bay[] bays;
+	public Bay[] bays = new Bay[6];
 
 	public Color startColor;
 	public Color finishColor;
@@ -23,28 +23,73 @@ public class BayController : MonoBehaviour {
         InitBays();
     }
 
-	// Use this for initialization
-	void Start () {
-       
+	void InitBays() {
+        for (int i = 0; i < 5; i++)
+        {
+            bays[i] = new Bay();
+            bays[i].currentProgress = 0f;
+            bays[i].bayNum = i;
+        }
 	}
 
-	void InitBays() {
-        int bayNum = 0;
-		foreach (Bay b in bays) {
-			b.currentProgress = 0f;
-            b.bayFinishEvent += BayFinish;
-            b.bayNum = bayNum++;
-		}
-        
-	}
+    void Update()
+    {
+        foreach (Bay b in bays)
+        {
+            if(b.carStatus != Bay.CarStatus.FULL) return;
+            b.currentProgress = Mathf.Clamp01(b.currentProgress - (bayProgressRate * Time.deltaTime));
+            if (b.currentProgress <= 0)
+            {
+                BayFinish(b);
+            }
+        }
+    }
 
 	//A callback for bay classes, notified by Bay class.
 	void BayFinish(Bay bay) {
-        CarInstance carInst = GameController.gc.GetCarByBay(bay.bayNum);
+        CarInstance carInst = GetCarByBay(bay.bayNum);
         if (carInst == null) return;
         carInst.CarLeave();
 		//Notify gameController.
+        DeallocateBay(carInst.bayNum);
 	}
+
+
+    public CarInstance GetCarByBay(int bay)
+    {
+        return bays[bay].currentCar;
+    }
+
+    public void AllocateBay(int bay, CarInstance carInst)
+    {
+        Bay b = bays[bay];
+        b.currentCar = carInst;
+        b.currentProgress = 1f;
+        b.carStatus = Bay.CarStatus.WAITING;
+
+        carInst.SetAnimationBay(bay);
+        carInst.bayNum = bay;
+    }
+
+    public void DeallocateBay(int bay)
+    {
+        Bay b = bays[bay];
+        b.carStatus = Bay.CarStatus.EMPTY;
+        b.currentCar = null;
+    }
+
+
+    public void NotifyCarReady(CarInstance carInst)
+    {
+        carInst.CarLeave();
+        bays[carInst.bayNum].carStatus = Bay.CarStatus.EMPTY;
+    }
+
+    public void NotifyCarStationEnter(CarInstance carInst)
+    {
+        bays[carInst.bayNum].currentProgress = 1f;
+    }
+
 
     //Gets if all bays are either waiting or full
     public bool isFull()
@@ -72,4 +117,6 @@ public class BayController : MonoBehaviour {
     {
         bays[bay].carStatus = Bay.CarStatus.EMPTY;
     }
+
+    //NEW METHODS
 }

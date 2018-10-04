@@ -32,7 +32,6 @@ public class CarInstance : MonoBehaviour {
             anim.SetTrigger("LeaveBay");
         }
         CloseBayIndicator();
-        GameController.gc.allWorldCars.Remove(this);
         BayController.bc.EmptyBay(bayNum);
     }
 
@@ -85,7 +84,7 @@ public class CarInstance : MonoBehaviour {
 
     public void CarArrivalEvent()
     {
-        GameController.gc.NotifyCarStationEnter(this);
+        BayController.bc.NotifyCarStationEnter(this);
     }
 
     public void CarDestroy()

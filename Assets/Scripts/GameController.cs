@@ -11,8 +11,6 @@ public class GameController : MonoBehaviour {
     public GameObject bayIndicatorPrefab;
     public BayController bayController;
 
-    public List<CarInstance> allWorldCars = new List<CarInstance>();
-
     public GameObject carObj;
 
     public IntroController introController;
@@ -56,7 +54,6 @@ public class GameController : MonoBehaviour {
             bayNum = Random.Range(0, 6);
         } while (bayController.isInUse(bayNum));
 
-        bayController.bays[bayNum].carStatus = Bay.CarStatus.WAITING;
         SpawnCar(bayNum);
     }
 
@@ -67,38 +64,15 @@ public class GameController : MonoBehaviour {
         {
             CheckCar();
         }
-
-        foreach (CarInstance ci in allWorldCars)
-        {
-            ci.UpdateBayIndicator(bayController.bays[ci.bayNum].currentProgress);
-        }
     }
 
     void SpawnCar(int bay) {
         GameObject pref = carPrefabs[Random.Range(0, carPrefabs.Length)];
         GameObject car = Instantiate(pref);
         CarInstance carInst = car.GetComponent<CarInstance>();
-        carInst.SetAnimationBay(bay);
-        carInst.bayNum = bay;
-        bayController.bays[bay].currentProgress = 1f;
-        allWorldCars.Add(carInst);
+        bayController.AllocateBay(bay, carInst);
     }
 
-    public void NotifyCarReady(CarInstance carInst) {
-        carInst.CarLeave();
-        bayController.bays[carInst.bayNum].carStatus = Bay.CarStatus.EMPTY;
-    }
-
-    public void NotifyCarStationEnter(CarInstance carInst)
-    {
-        bayController.bays[carInst.bayNum].currentProgress = 1f;
-        
-    }
-
-    public CarInstance GetCarByBay(int bay)
-    {
-        return allWorldCars.Find(c => c.bayNum == bay);
-    }
 
     public void PlayGame()
     {

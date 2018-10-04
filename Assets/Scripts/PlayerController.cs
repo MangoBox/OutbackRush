@@ -54,7 +54,7 @@ public class PlayerController : MonoBehaviour {
                     if (currentDirt <= 0)
                     {
                         //Car is completely clean
-                        GameController.gc.NotifyCarReady(rh.collider.GetComponentInParent<CarInstance>());
+                        BayController.bc.NotifyCarReady(rh.collider.GetComponentInParent<CarInstance>());
                     }
                     dirtMat.SetFloat("_BlendAmount", currentDirt);
                 }
