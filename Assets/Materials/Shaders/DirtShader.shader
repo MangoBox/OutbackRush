@@ -38,12 +38,12 @@
 		//UNITY_INSTANCING_BUFFER_END(Props)
 
 		void surf(Input IN, inout SurfaceOutputStandardSpecular o) {
-			fixed4 main = _Color;
-			fixed4 paint = tex2D(_PaintTex, IN.uv_PaintTex);
-			//o.Albedo = lerp(main.rgb, paint, main.a * _BlendAmount);
+			fixed4 main = _Color; //Generates the primary paint color for the car.
+			fixed4 paint = tex2D(_PaintTex, IN.uv_PaintTex); //Samples the correct paint texture for this UV on the car.
 
+			//This line overlays the base texture with the dirt texture, with respect to Parameter _BlendAmount
 			o.Specular = main.rgb * (1 - paint.a * _BlendAmount) + paint.a * _BlendAmount * _DirtColor;
-			
+			//Adds metallic to non-dirty areas to simulate the shiny paint showing through.
 			o.Smoothness = _Metallic * (1 - paint.a * _BlendAmount);
 		}
 		ENDCG

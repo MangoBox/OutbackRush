@@ -14,7 +14,9 @@ public class PlayerController : MonoBehaviour {
     public float yaw = 0.0f;
     public float pitch = 0.0f;
 
-    public float cleaningSpeed = 0.025f;
+    public float cleaningSpeed = 15f;
+
+    CarInstance lastCarCleaned;
 	
 	// Update is called once per frame
 	void FixedUpdate () {
@@ -37,30 +39,42 @@ public class PlayerController : MonoBehaviour {
 
 
     void Update() {
-
-
-        if (Input.GetKey(KeyCode.Mouse0))
+        if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             RaycastHit rh;
-            if (Physics.Raycast(camera.transform.position, camera.transform.forward, out rh))
+            if (Physics.Raycast(camera.ScreenToWorldPoint(Input.mousePosition), camera.transform.forward, out rh))
             {
-                print(rh.collider.name);
                 if (rh.collider.name == "MainBody")
                 {
-                    /*if (Vector3.Distance(rh.collider.ClosestPoint(transform.position), transform.position) > 5)
-                        return;*/
+                    if (Vector3.Distance(rh.collider.ClosestPoint(transform.position), transform.position) > 5)
+                        return;
                     Material dirtMat = rh.collider.gameObject.GetComponent<MeshRenderer>().materials[1];
-                    float currentDirt = Mathf.Clamp01(dirtMat.GetFloat("_BlendAmount") - cleaningSpeed * Time.deltaTime);
+                    float currentDirt = Mathf.Clamp01(dirtMat.GetFloat("_BlendAmount") - (1 / cleaningSpeed));
+                    CarInstance carTarget = rh.collider.GetComponentInParent<CarInstance>();
+                    lastCarCleaned = carTarget;
+                    carTarget.isCleaning = true;
+                    carTarget.cleaningParticles.Emit(5);
                     if (currentDirt <= 0)
                     {
+                        if (carTarget.thisBay == null) return;
                         //Car is completely clean
-                        BayController.bc.NotifyCarReady(rh.collider.GetComponentInParent<CarInstance>());
+                        BayController.bc.NotifyBayCleaned(carTarget.thisBay);
                     }
                     dirtMat.SetFloat("_BlendAmount", currentDirt);
+                    BayController.bc.currentCleaningBay = carTarget.thisBay;
                 }
-                
+                else
+                {
+                    BayController.bc.currentCleaningBay = null;
+                }
+
             }
 
+        }
+        else
+        {
+            if(lastCarCleaned != null) lastCarCleaned.isCleaning = false;
+            BayController.bc.currentCleaningBay = null;
         }
     }
 }

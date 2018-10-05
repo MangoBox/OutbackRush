@@ -10,17 +10,18 @@ public class CarInstance : MonoBehaviour {
 
     public MeshRenderer bodyRenderer;
     public Transform bayIndicatorPosition;
+    public ParticleSystem cleaningParticles;
     [HideInInspector]
     Image baseBayIndicator;
     [HideInInspector]
     Image filledBayIndicator;
     [HideInInspector]
     Image faceBayIndicator;
+    public bool isCleaning = false;
 
-    public int bayNum;
+    public Bay thisBay;
 
     public void SetAnimationBay(int bay) {
-        bayNum = bay;
         GetComponent<Animator>().SetInteger("BayNum", bay);
     }
 
@@ -32,12 +33,12 @@ public class CarInstance : MonoBehaviour {
             anim.SetTrigger("LeaveBay");
         }
         CloseBayIndicator();
-        BayController.bc.EmptyBay(bayNum);
     }
 
+    //Called by Animator when the Car enters the bay.
     public void FinishBayEnter()
     {
-        BayController.bc.NotifyBayEnter(this);
+        BayController.bc.NotifyBayEntered(thisBay, this);
         OpenBayIndicator();
     }
 
@@ -80,11 +81,6 @@ public class CarInstance : MonoBehaviour {
     public void CloseBayIndicator()
     {
         baseBayIndicator.GetComponent<Animator>().SetTrigger("FadeOut");
-    }
-
-    public void CarArrivalEvent()
-    {
-        BayController.bc.NotifyCarStationEnter(this);
     }
 
     public void CarDestroy()
