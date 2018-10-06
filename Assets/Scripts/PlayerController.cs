@@ -20,11 +20,13 @@ public class PlayerController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void FixedUpdate () {
+        if (GameController.gc.gameState != GameController.GameState.PLAYING) return;
         rigidbody.AddForce(new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")) * movementSpeed); 
 	}
 
     void LateUpdate()
     {
+        if (GameController.gc.gameState != GameController.GameState.PLAYING) return;
         Vector2 lookDirection = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")).normalized;
 
         if (lookDirection.sqrMagnitude != 0)
@@ -41,6 +43,7 @@ public class PlayerController : MonoBehaviour {
     void Update() {
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
+            GetComponent<Animator>().SetBool("Brushing", true);
             RaycastHit rh;
             if (Physics.Raycast(camera.ScreenToWorldPoint(Input.mousePosition), camera.transform.forward, out rh))
             {
@@ -73,6 +76,7 @@ public class PlayerController : MonoBehaviour {
         }
         else
         {
+            GetComponent<Animator>().SetBool("Brushing", false);
             if(lastCarCleaned != null) lastCarCleaned.isCleaning = false;
             BayController.bc.currentCleaningBay = null;
         }

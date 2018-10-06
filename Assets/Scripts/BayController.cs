@@ -70,6 +70,7 @@ public class BayController : MonoBehaviour {
         //notify GameController
         DeallocateBay(bay);
         GameController.gc.CarAngered();
+        GameController.gc.soundManager.Play("FailDing");
     }
 
     public void NotifyBayCleaned(Bay bay)
@@ -78,6 +79,7 @@ public class BayController : MonoBehaviour {
         DeallocateBay(bay);
         GameController.gc.CarServed();
         GameController.gc.NotifyAllEmpty();
+        GameController.gc.soundManager.Play("Ding");
     }
 
     public void Update()
@@ -126,8 +128,13 @@ public class BayController : MonoBehaviour {
             if (b.currentCar != null)
                 b.currentCar.CarDestroy();
             b.carStatus = Bay.CarStatus.EMPTY;
-            if(currentCleaningBay != null)
-                currentCleaningBay.currentCar.CarDestroy();
+            if (currentCleaningBay != null)
+            {
+                if (currentCleaningBay.currentCar != null)
+                {
+                    currentCleaningBay.currentCar.CarDestroy();
+                }
+            }
         }
     }
 

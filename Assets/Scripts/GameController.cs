@@ -13,6 +13,7 @@ public class GameController : MonoBehaviour {
     public GameObject bayIndicatorPrefab;
     public BayController bayController;
     public PlayerController playerController;
+    public SoundManager soundManager;
 
     public GameObject carObj;
 
@@ -34,6 +35,7 @@ public class GameController : MonoBehaviour {
     public Animator failedMenu;
     public Animator introAnimator;
     public Animator levelAlertAnimator;
+    public Animator tutorialAnimator;
 
     [Header("Cameras")]
     public Camera mainMenuCamera;
@@ -57,6 +59,8 @@ public class GameController : MonoBehaviour {
 
     static bool immediatelyRetry = false;
 
+    Vector3 startMainMenuCameraPosition;
+
     public void ResetAllGameVariables()
     {
         level = 0;
@@ -64,7 +68,7 @@ public class GameController : MonoBehaviour {
         servedCarCount = 0;
         carsAngered = 0;
         totalCarsServed = 0;
-        maxCarsAngered = 5;
+        maxCarsAngered = GetMaxCarAngered();
         highScore = 0;
     }
 
@@ -74,6 +78,7 @@ public class GameController : MonoBehaviour {
         MAIN_MENU,
         INTRO,
         PLAYING,
+        TUTORIAL
     }
     public GameState gameState = GameState.MAIN_MENU;
 
@@ -94,6 +99,9 @@ public class GameController : MonoBehaviour {
         }
         ResetAllGameVariables();
 		gc = this;
+        soundManager = GetComponent<SoundManager>();
+
+        startMainMenuCameraPosition = mainMenuCamera.transform.position;
 	}
 
     public void CarAngered()
@@ -135,6 +143,15 @@ public class GameController : MonoBehaviour {
 
     void Update()
     {
+        mainMenuCamera.transform.position = startMainMenuCameraPosition + new Vector3(0, 0, Input.mousePosition.x) * 0.001f;
+
+        if (Input.GetKeyDown(KeyCode.Mouse0) && gameState == GameState.TUTORIAL)
+        {
+            gameState = GameState.PLAYING;
+            tutorialAnimator.SetTrigger("FadeOut");
+            Invoke("StartNewLevel", 2.5f);
+        }
+
         if (gameState != GameState.PLAYING) return;
         if (Random.value < (1f / (60f *  GetCarSecondSpacing(level))))
         {
@@ -170,10 +187,16 @@ public class GameController : MonoBehaviour {
 
     public void FinishIntro()
     {
-        if (gameState == GameState.PLAYING)
+
+        if (gameState == GameState.PLAYING || gameState == GameState.TUTORIAL)
         {
             return;
         }
+
+        ResetAllGameVariables();
+        soundManager.Stop("SoundtrackAmbient");
+        soundManager.Play("SoundtrackMain");
+
         introAnimator.SetTrigger("FadeOut");
         mainMenuCamera.gameObject.SetActive(false);
         playerCamera.gameObject.SetActive(true);
@@ -181,16 +204,57 @@ public class GameController : MonoBehaviour {
         mainMenuCanvas.SetActive(false);
         gameInfoCanvas.SetActive(true);
 
-        gameState = GameState.PLAYING;
-        StartNewLevel();
+        gameState = GameState.TUTORIAL;
+        tutorialAnimator.SetTrigger("EnableTutorial");
+
         playerController.transform.position = new Vector3(248.5f, 1.9f, 227.9f);
     }
 
     //Converts a level number into a car count for this level. Sigmoid function with linear and constant functions added.
     public int LevelCarCount(int level)
     {
-        //return Mathf.FloorToInt((29.2f / 1 + Mathf.Exp(-0.2f * ((float)level - 5.5f))) - 3.8f + (0.6f * (float)level));
-        return (3 * level) + 5;
+        switch (difficulty)
+        {
+            case Difficulty.EASY:
+                return (2*level) + 3;
+            case Difficulty.NORMAL:
+                return (2*level) + 5;
+            case Difficulty.HARD:
+                return (3 * level) + 8;
+            default:
+                return (2 * level) + 5;
+
+        }
+    }
+
+    public int GetMaxCarAngered()
+    {
+        switch (difficulty)
+        {
+            case Difficulty.EASY:
+                return 7;
+            case Difficulty.NORMAL:
+                return 5;
+            case Difficulty.HARD:
+                return 3;
+            default:
+                return 5;
+        }
+    }
+
+    public float GetBayProgressRate(int level)
+    {
+        switch (difficulty)
+        {
+            case Difficulty.EASY:
+                return 0.075f + ((float)level * 0.01f);
+            case Difficulty.NORMAL:
+                return 0.1f + ((float)level * 0.03f);
+            case Difficulty.HARD:
+                return 0.125f + ((float)level * 0.05f);
+            default:
+                return 0.1f + ((float)level * 0.03f);
+        }
     }
 
     public void NotifyAllEmpty()
@@ -226,7 +290,7 @@ public class GameController : MonoBehaviour {
     public void StartNewLevel()
     {
         BayController.bc.EmptyAllBays();
-        BayController.bc.bayProgressRate += 0.03f;
+        BayController.bc.bayProgressRate = GetBayProgressRate(level);
 
 
         level++;    
@@ -242,6 +306,8 @@ public class GameController : MonoBehaviour {
         carsAngeredText.text = carsAngered.ToString() + "/" + maxCarsAngered.ToString() + " People Angered";
 
         carsServed.text = servedCarCount.ToString() + "/" + carCount.ToString() + " Cars Served";
+
+        soundManager.Play("Whoosh");
     }
 
     public void RetryButton()
@@ -274,6 +340,11 @@ public class GameController : MonoBehaviour {
         }
         string upperDifficulty = difficulty.ToString();
         difficultyText.text = char.ToUpper(upperDifficulty[0]) + upperDifficulty.Substring(1).ToLower();
+    }
+
+    public void QuitButton()
+    {
+        Application.Quit();
     }
 
 }
