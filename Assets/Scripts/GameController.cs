@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.PostProcessing;
 
 public class GameController : MonoBehaviour {
 
@@ -57,8 +58,6 @@ public class GameController : MonoBehaviour {
 
     bool readyForNextLevel = false;
 
-    static bool immediatelyRetry = false;
-
     Vector3 startMainMenuCameraPosition;
 
     public void ResetAllGameVariables()
@@ -78,7 +77,8 @@ public class GameController : MonoBehaviour {
         MAIN_MENU,
         INTRO,
         PLAYING,
-        TUTORIAL
+        TUTORIAL,
+        FAILED_SCREEN
     }
     public GameState gameState = GameState.MAIN_MENU;
 
@@ -92,16 +92,21 @@ public class GameController : MonoBehaviour {
 
 
 	void Start() {
-        if (immediatelyRetry)
+        //Graphics quality control.
+        if (QualitySettings.GetQualityLevel() == 0)
         {
-            PlayGame();
-            immediatelyRetry = false;
+            playerCamera.GetComponent<PostProcessingBehaviour>().profile = null;
+            mainMenuCamera.GetComponent<PostProcessingBehaviour>().profile = null;
         }
+
+
         ResetAllGameVariables();
 		gc = this;
         soundManager = GetComponent<SoundManager>();
 
         startMainMenuCameraPosition = mainMenuCamera.transform.position;
+        //Ensures difficulty text is up to date.
+        ChangeDifficultyDelta(0);
 	}
 
     public void CarAngered()
@@ -132,6 +137,7 @@ public class GameController : MonoBehaviour {
 
     void GameOver()
     {
+        gameState = GameState.FAILED_SCREEN;
         failedMenu.SetTrigger("FadeIn");
         failedMainText.text = "You reached level " + level.ToString() + " and served " + totalCarsServed.ToString() + " cars!";
         highScore = RegisterLevelHighScore();
@@ -145,6 +151,11 @@ public class GameController : MonoBehaviour {
     {
         mainMenuCamera.transform.position = startMainMenuCameraPosition + new Vector3(0, 0, Input.mousePosition.x) * 0.001f;
 
+        if (Input.GetKeyDown(KeyCode.Escape) && gameState == GameState.INTRO)
+        {
+            FinishIntro();
+        }
+
         if (Input.GetKeyDown(KeyCode.Mouse0) && gameState == GameState.TUTORIAL)
         {
             gameState = GameState.PLAYING;
@@ -153,9 +164,9 @@ public class GameController : MonoBehaviour {
         }
 
         if (gameState != GameState.PLAYING) return;
-        if (Random.value < (1f / (60f *  GetCarSecondSpacing(level))))
+        if (Random.value < Time.deltaTime / GetCarSecondSpacing(level))
         {
-            CheckCarCanSpawn();
+            CheckCarCanSpawn(); 
         }
     }
 
@@ -169,7 +180,6 @@ public class GameController : MonoBehaviour {
     }
 
     void SpawnCar(int bay) {
-        print("Spawned car for level " + level.ToString() + ", cars served = " + servedCarCount.ToString());
         GameObject pref = carPrefabs[Random.Range(0, carPrefabs.Length)];
         GameObject car = Instantiate(pref);
         CarInstance carInst = car.GetComponent<CarInstance>();
@@ -208,6 +218,7 @@ public class GameController : MonoBehaviour {
         tutorialAnimator.SetTrigger("EnableTutorial");
 
         playerController.transform.position = new Vector3(248.5f, 1.9f, 227.9f);
+        UpdateLevelInfo(false);
     }
 
     //Converts a level number into a car count for this level. Sigmoid function with linear and constant functions added.
@@ -301,23 +312,48 @@ public class GameController : MonoBehaviour {
         
 
         levelAlertAnimator.SetTrigger("DisplayLevel");
-        levelAlertAnimator.GetComponentInChildren<Text>().text = "Level " + level.ToString();
-        levelNumber.text = "Level " + level.ToString();
-        carsAngeredText.text = carsAngered.ToString() + "/" + maxCarsAngered.ToString() + " People Angered";
-
-        carsServed.text = servedCarCount.ToString() + "/" + carCount.ToString() + " Cars Served";
+        UpdateLevelInfo(true);
 
         soundManager.Play("Whoosh");
     }
 
+    public void UpdateLevelInfo(bool enable)
+    {
+        if (enable)
+        {
+            levelNumber.gameObject.SetActive(true);
+            carsAngeredText.gameObject.SetActive(true);
+            carsServed.gameObject.SetActive(true);
+
+            levelAlertAnimator.GetComponentInChildren<Text>().text = "Level " + level.ToString();
+            levelNumber.text = "Level " + level.ToString();
+            carsAngeredText.text = carsAngered.ToString() + "/" + maxCarsAngered.ToString() + " People Angered";
+
+            carsServed.text = servedCarCount.ToString() + "/" + carCount.ToString() + " Cars Served";
+        }
+        else
+        {
+            levelNumber.gameObject.SetActive(false);
+            carsAngeredText.gameObject.SetActive(false);
+            carsServed.gameObject.SetActive(false);
+        }
+    }
+
     public void RetryButton()
     {
-        SceneManager.LoadScene("MainLevel");
-        immediatelyRetry = true;
+        failedMenu.Play("IdleOut");
+        gameInfoCanvas.SetActive(false);
+        ResetLevel();
     }
 
     public void MainMenuButton() {
-        SceneManager.LoadScene("MainLevel");
+        gameState = GameState.MAIN_MENU;
+        mainMenuCanvas.SetActive(true);
+        gameInfoCanvas.SetActive(false);
+        failedMenu.Play("IdleOut");
+
+        mainMenuCamera.gameObject.SetActive(true);
+        playerCamera.gameObject.SetActive(false);
     }
 
     ///Difficulty control

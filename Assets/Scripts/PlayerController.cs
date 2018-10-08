@@ -4,8 +4,8 @@ using UnityEngine;
     
 public class PlayerController : MonoBehaviour {
 
-    public Camera camera;
-    public Rigidbody rigidbody;
+    public Camera playerCamera;
+    public Rigidbody playerRigidbody;
     public Animator playerAnimator;
 
     public float sensitivity;
@@ -21,31 +21,24 @@ public class PlayerController : MonoBehaviour {
 	// Update is called once per frame
 	void FixedUpdate () {
         if (GameController.gc.gameState != GameController.GameState.PLAYING) return;
-        rigidbody.AddForce(new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")) * movementSpeed); 
-	}
-
-    void LateUpdate()
-    {
-        if (GameController.gc.gameState != GameController.GameState.PLAYING) return;
+        playerRigidbody.AddForce(Quaternion.Euler(0, -45, 0).normalized * new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")) * movementSpeed);
         Vector2 lookDirection = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")).normalized;
 
         if (lookDirection.sqrMagnitude != 0)
         {
-            transform.rotation = Quaternion.Euler(0, 360 - (Mathf.Rad2Deg * Mathf.Atan2(lookDirection.y, lookDirection.x) - 90), 0);
+            transform.rotation = Quaternion.Euler(0, 360 - (Mathf.Rad2Deg * Mathf.Atan2(lookDirection.y, lookDirection.x) - 45), 0);
         }
 
         float animParam = (lookDirection.magnitude + 1f) / 2f;
         playerAnimator.SetFloat("Vertical", animParam);
-
-    }
-
+	}
 
     void Update() {
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
             GetComponent<Animator>().SetBool("Brushing", true);
             RaycastHit rh;
-            if (Physics.Raycast(camera.ScreenToWorldPoint(Input.mousePosition), camera.transform.forward, out rh))
+            if (Physics.Raycast(playerCamera.ScreenToWorldPoint(Input.mousePosition), playerCamera.transform.forward, out rh))
             {
                 if (rh.collider.name == "MainBody")
                 {

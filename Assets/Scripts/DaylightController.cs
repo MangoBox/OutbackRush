@@ -12,14 +12,6 @@ public class DaylightController : MonoBehaviour {
     public float daylightRate;
     public AnimationCurve intensityCurve;
     public float maxIntensity;
-
-    float progress = 0f;
-
-
-	// Use this for initialization
-	void Start () {
-		
-	}
 	
 	// Update is called once per frame
 	void Update () {

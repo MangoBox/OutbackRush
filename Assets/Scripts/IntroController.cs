@@ -16,6 +16,10 @@ public class IntroController : MonoBehaviour {
     public DialogueSection[] dialogueSections;
     Queue<DialogueSection> dialogueQueue;
 
+    float currentLetterTime = 0f;
+    int currentLetterIndex = 0;
+    DialogueSection currentDialog;
+
     public void StartDialogue()
     {
         if (dialogueSections.Length <= 0) return;
@@ -25,21 +29,16 @@ public class IntroController : MonoBehaviour {
         {
             dialogueQueue.Enqueue(ds);
         }
-        StopAllCoroutines();
-        if (!targetText.IsActive()) return;
-        StartCoroutine(TypeSentence(dialogueQueue.Dequeue()));
+        //if (!targetText.IsActive()) return;
+        TypeSentence(dialogueQueue.Dequeue());
 
     }
 
-    IEnumerator TypeSentence(DialogueSection ds)
+    void TypeSentence(DialogueSection ds)
     {
         targetText.text = "";
-        foreach (char letter in ds.text.ToCharArray())
-        {
-            targetText.text += letter.ToString();
-            yield return new WaitForSeconds(0.04f);
-        }
-        
+        currentDialog = ds;
+        currentLetterIndex = 0;
     }
 
     void FinishDialogues()
@@ -55,14 +54,21 @@ public class IntroController : MonoBehaviour {
 	// Update is called once per frame
     void Update()
     {
+        currentLetterTime += Time.deltaTime;
+        if (currentLetterTime > 0.04f)
+        {
+            currentLetterTime = 0f;
+            if (currentLetterIndex < currentDialog.text.Length)
+                targetText.text += currentDialog.text[currentLetterIndex++].ToString();
+        }
+
         if (Input.GetMouseButtonDown(0)) {
             if (dialogueQueue.Count <= 0)
             {
                 FinishDialogues();
                 return;
             }
-            StopAllCoroutines();
-            StartCoroutine(TypeSentence(dialogueQueue.Dequeue()));
+            TypeSentence(dialogueQueue.Dequeue());
         }
 
     }
