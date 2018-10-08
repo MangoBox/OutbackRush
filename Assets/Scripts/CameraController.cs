@@ -7,9 +7,15 @@ public class CameraController : MonoBehaviour {
     public Transform cameraTarget;
     public float moveSpeed;
 
+    private Vector3 camVelocity;
 
-    public void LateUpdate()
+    public void Start()
     {
-        transform.position = Vector3.Lerp(transform.position, cameraTarget.position, moveSpeed * Time.deltaTime);
+        camVelocity = Vector3.zero;
+    }
+
+    public void Update()
+    {
+        transform.position = Vector3.SmoothDamp(transform.position, cameraTarget.position, ref camVelocity, moveSpeed);
     }
 }

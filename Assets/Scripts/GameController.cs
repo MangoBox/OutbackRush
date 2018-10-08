@@ -190,6 +190,7 @@ public class GameController : MonoBehaviour {
 
     public void PlayGame()
     {
+        introAnimator.gameObject.SetActive(true);
         introAnimator.SetTrigger("FadeIn");
         introController.StartDialogue();
         gameState = GameState.INTRO;
@@ -295,11 +296,13 @@ public class GameController : MonoBehaviour {
     public void ResetLevel()
     {
         ResetAllGameVariables();
+
         PlayGame();
     }
 
     public void StartNewLevel()
     {
+        introAnimator.gameObject.SetActive(false);
         BayController.bc.EmptyAllBays();
         BayController.bc.bayProgressRate = GetBayProgressRate(level);
 
@@ -343,6 +346,8 @@ public class GameController : MonoBehaviour {
     {
         failedMenu.Play("IdleOut");
         gameInfoCanvas.SetActive(false);
+        soundManager.StopAll();
+        soundManager.Play("SoundtrackAmbient");
         ResetLevel();
     }
 
@@ -354,6 +359,9 @@ public class GameController : MonoBehaviour {
 
         mainMenuCamera.gameObject.SetActive(true);
         playerCamera.gameObject.SetActive(false);
+
+        soundManager.StopAll();
+        soundManager.Play("SoundtrackAmbient");
     }
 
     ///Difficulty control

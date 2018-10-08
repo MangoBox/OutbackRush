@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 0.653
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 170076734}
-  m_IndirectSpecularColor: {r: 0.5454798, g: 0.5642709, b: 0.5876173, a: 0.653}
+  m_IndirectSpecularColor: {r: 0.54547936, g: 0.5642698, b: 0.58761686, a: 0.653}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1112,7 +1112,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraTarget: {fileID: 347441859}
-  moveSpeed: 10
+  moveSpeed: 0.1
 --- !u!4 &275516492
 Transform:
   m_ObjectHideFlags: 0
@@ -3052,7 +3052,7 @@ MonoBehaviour:
     m_MaxSize: 86
     m_Alignment: 4
     m_AlignByGeometry: 0
-    m_RichText: 1
+    m_RichText: 0
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1

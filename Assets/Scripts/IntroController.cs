@@ -55,7 +55,7 @@ public class IntroController : MonoBehaviour {
     void Update()
     {
         currentLetterTime += Time.deltaTime;
-        if (currentLetterTime > 0.04f)
+        if (currentLetterTime > 0.02f)
         {
             currentLetterTime = 0f;
             if (currentLetterIndex < currentDialog.text.Length)
@@ -63,6 +63,8 @@ public class IntroController : MonoBehaviour {
         }
 
         if (Input.GetMouseButtonDown(0)) {
+            if (GameController.gc.gameState != GameController.GameState.INTRO)
+                return;
             if (dialogueQueue.Count <= 0)
             {
                 FinishDialogues();
